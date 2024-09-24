@@ -1,20 +1,55 @@
-import SignUp from './Components/SignUp';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Correct import for BrowserRouter
-import HomePage from './Components/HomePage';
-import Login from './Components/Login';
+import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import io from "socket.io-client";
 import { setSocket } from './redux/socketSlice';
 import { setOnlineUsers } from './redux/userSlice';
+import HomePage from './Components/HomePage';
+import SignUp from './Components/SignUp';
+import Login from './Components/Login';
+
+const BASE_URL = 'https://backend-chat-application-pwpe.onrender.com';
+
+// Layout component to wrap all pages
+function Layout({ children }) {
+  return (
+    <div className="p-4 h-screen flex items-center justify-center">
+      {children}
+    </div>
+  );
+}
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <Layout>
+        <HomePage />
+      </Layout>
+    ),
+  },
+  {
+    path: "/register",
+    element: (
+      <Layout>
+        <SignUp />
+      </Layout>
+    ),
+  },
+  {
+    path: "/login",
+    element: (
+      <Layout>
+        <Login />
+      </Layout>
+    ),
+  },
+]);
 
 function App() {
   const { authUser } = useSelector((store) => store.user);
   const { socket } = useSelector((store) => store.socket);
   const dispatch = useDispatch();
-
-  console.log(authUser);
-  const BASE_URL = 'https://backend-chat-application-pwpe.onrender.com';
 
   useEffect(() => {
     if (authUser) {
@@ -26,9 +61,9 @@ function App() {
       dispatch(setSocket(socket));
 
       socket.on('getOnlineUsers', (onlineUsers) => {
-        dispatch(setOnlineUsers(onlineUsers));
+        dispatch(setOnlineUsers(onlineUsers))
       });
-      
+
       return () => socket.close();
     } else {
       if (socket) {
@@ -36,16 +71,10 @@ function App() {
         dispatch(setSocket(null));
       }
     }
-  }, [authUser, socket, dispatch]);
+  }, [authUser, dispatch, socket]);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<SignUp />} />
-        <Route path="/register" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </Router>
+    <RouterProvider router={router} />
   );
 }
 

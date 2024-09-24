@@ -11,7 +11,7 @@ import { setOnlineUsers } from './redux/userSlice';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />
+    element: <SignUp />
   },
   {
     path: "/register",

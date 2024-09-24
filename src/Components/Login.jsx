@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setAuthUser } from '../redux/userSlice';
 const BASE_URL = 'https://backend-chat-application-pwpe.onrender.com';
-
 function Login() {
   const [user, setUser] = useState({
     username: "",

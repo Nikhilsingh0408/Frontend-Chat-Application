@@ -29,9 +29,10 @@ function App() {
   const dispatch = useDispatch();
 
   console.log(authUser);
+const BASE_URL = 'https://backend-chat-application-pwpe.onrender.com';
   useEffect(() => {
     if (authUser) {
-      const socket = io('http://localhost:4000', {
+      const socket = io(BASE_URL, {
         query: {
           userId: authUser._id
         }

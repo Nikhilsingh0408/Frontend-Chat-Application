@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import io from "socket.io-client";
 import { setSocket } from './redux/socketSlice';
 import { setOnlineUsers } from './redux/userSlice';
-import { Route,Router,Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // const router = createBrowserRouter([
 //   {
 //     path:""

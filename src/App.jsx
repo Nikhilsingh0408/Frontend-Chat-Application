@@ -1,56 +1,35 @@
-import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
+import SignUp from './Components/SignUp';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import HomePage from './Components/HomePage';
+import Login from './Components/Login';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import io from "socket.io-client";
 import { setSocket } from './redux/socketSlice';
 import { setOnlineUsers } from './redux/userSlice';
-import HomePage from './Components/HomePage';
-import SignUp from './Components/SignUp';
-import Login from './Components/Login';
-
-const BASE_URL = 'https://backend-chat-application-pwpe.onrender.com';
-
-// Layout component to wrap all pages
-function Layout({ children }) {
-  return (
-    <div className="p-4 h-screen flex items-center justify-center">
-      {children}
-    </div>
-  );
-}
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <Layout>
-        <HomePage />
-      </Layout>
-    ),
+    element: <HomePage />
   },
   {
     path: "/register",
-    element: (
-      <Layout>
-        <SignUp />
-      </Layout>
-    ),
+    element: <SignUp />
   },
   {
     path: "/login",
-    element: (
-      <Layout>
-        <Login />
-      </Layout>
-    ),
+    element: <Login />
   },
-]);
+])
 
 function App() {
   const { authUser } = useSelector((store) => store.user);
   const { socket } = useSelector((store) => store.socket);
   const dispatch = useDispatch();
 
+  console.log(authUser);
+const BASE_URL = 'https://backend-chat-application-pwpe.onrender.com';
   useEffect(() => {
     if (authUser) {
       const socket = io(BASE_URL, {
@@ -62,20 +41,19 @@ function App() {
 
       socket.on('getOnlineUsers', (onlineUsers) => {
         dispatch(setOnlineUsers(onlineUsers))
-      });
-
+      })
       return () => socket.close();
-    } else {
+    }
+    else {
       if (socket) {
         socket.close();
-        dispatch(setSocket(null));
+        dispatch(setSocket(null))
       }
     }
-  }, [authUser, dispatch, socket]);
-
+  }, [authUser]);
   return (
-    <RouterProvider router={router} />
-  );
+      <RouterProvider router={router} />
+  )
 }
 
-export default App;
+export default App

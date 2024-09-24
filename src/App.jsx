@@ -7,21 +7,24 @@ import { useEffect, useState } from 'react';
 import io from "socket.io-client";
 import { setSocket } from './redux/socketSlice';
 import { setOnlineUsers } from './redux/userSlice';
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <SignUp />
-  },
-  {
-    path: "/register",
-    element: <SignUp />
-  },
-  {
-    path: "/login",
-    element: <Login />
-  },
-])
+import { Route,Router,Routes } from 'react-router-dom';
+// const router = createBrowserRouter([
+//   {
+//     path:""
+//   },
+//   {
+//     path: "/",
+//     element: <SignUp />
+//   },
+//   {
+//     path: "/register",
+//     element: <SignUp />
+//   },
+//   {
+//     path: "/login",
+//     element: <Login />
+//   },
+// ])
 
 function App() {
   const { authUser } = useSelector((store) => store.user);
@@ -52,9 +55,13 @@ const BASE_URL = 'https://backend-chat-application-pwpe.onrender.com';
     }
   }, [authUser]);
   return (
-    <div className="p-4 h-screen flex items-center justify-center">
-      <RouterProvider router={router} />
-    </div>
+    <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </Router>
   )
 }
 
